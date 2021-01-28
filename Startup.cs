@@ -38,7 +38,12 @@ namespace SSEServer {
                         };
                     });
             IdentityModelEventSource.ShowPII = true;
-
+            services.AddCors(options => {
+                options.AddPolicy("CorsPolicy",
+                    builder => builder.AllowAnyOrigin()
+                        .AllowAnyMethod()
+                        .AllowAnyHeader());
+            });
             services.AddSwaggerGen(c => {
                 c.SwaggerDoc("v1", new OpenApiInfo{Title = "SSEServer", Version = "v1"});
                 c.AddSecurityDefinition("Bearer",
@@ -84,7 +89,7 @@ namespace SSEServer {
 
             app.UseAuthorization();
             app.UseAuthentication();
-
+            app.UseCors("CorsPolicy");
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
         }
     }

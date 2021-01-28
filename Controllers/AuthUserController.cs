@@ -114,7 +114,9 @@ namespace SSEServer.Controllers {
         [HttpPost("Login")]
         public async Task<IActionResult> Login([FromBody] User user){
             var result = Users.Find(user1 => user1.Id == user.Id);
-            return Ok(GenerateToken(result));
+            return Ok(new{
+                Token = GenerateToken(result)
+            });
         }
 
         private string GenerateToken(User user){

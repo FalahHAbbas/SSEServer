@@ -1,0 +1,47 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <script src="node_modules/event-source-polyfill/src/eventsource.js"></script>
+    <script type="text/javascript">
+
+        if (typeof (EventSource) !== "undefined") {
+            var connection = connect("https://localhost:5001/weatherforecast/OnChildAdded",
+                ["OnChildAdded", "open", "onAdded", "onDeleted", 'close'],
+                (event, data) => {
+                    if (event == 'close') connection.close();
+                    const div = document.getElementById("result");
+                    const h2 = document.createElement("h2");
+                    h2.innerText = event;
+                    console.log(event);
+                    div.appendChild(h2);
+                    const h4 = document.createElement("h4");
+                    h4.innerText = data ?? "";
+                    div.appendChild(h4);
+                    document.body.appendChild(div);
+                });
+        } else {
+            document.getElementById("result").innerHTML = "Sorry, your browser does not support server-sent events...";
+        }
+
+        function connect(url, events, show) {
+            const es = new EventSource(url);
+            const listener = function (event) {
+                show(event.type, event.data)
+            };
+            events.forEach(e => es.addEventListener(e, listener))
+            return es;
+            es.addEventListener('',function (event) {
+                show(event.type, event.data)
+            })
+        }
+    </script>
+
+</head>
+<body>
+
+<div id="result">
+</div>
+
+
+</body>
+</html>
