@@ -12,7 +12,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Clients\Dart" />
+      <Folder Include="Clients\Dart\bin" />
     </ItemGroup>
 
 </Project>
